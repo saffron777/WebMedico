@@ -1,0 +1,47 @@
+﻿@model IEnumerable<IFarmacias.Models.PatientHistoryInfoResponse>
+
+<div class="col-12">
+    @if (Model != null && Model.Any())
+    {
+        <h4><strong>Histórico de consultas do utente</strong></h4>
+        <div class="col-12 mdbc-nopad text-right">
+            <br />
+            <table class="table z-depth-1 mdbc-table table-hover">
+                <thead>
+
+                    <tr class="grey-text text-darken-1">
+                        <td class="text-left">Nome do medico</td>
+                        <td>Motivo</td>
+                        <td>Estado</td>
+                        <td>Data</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-left">@item.MedicName</td>
+                            <td>@item.Description</td>
+                            <td>@item.Status</td>
+                            <td>@item.Date</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="col-4 offset-4 text-center">
+            <br />
+            <br />
+            <br />
+            <br />
+            <div class="offset-1 col-10">
+                <img class="col-12" src="~/Content/Images/logo.png" />
+            </div>
+            <br />
+            <h3>Não existem dados</h3>
+        </div>
+    }
+</div>

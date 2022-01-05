@@ -1,0 +1,50 @@
+﻿@model IFarmacias.Models.SoapResponse
+
+<div class="col-12">
+    @using (Ajax.BeginForm("SetTabSoap",
+        new { idConsulta = ViewBag.idConsulta },
+        new AjaxOptions()
+        {
+            OnBegin = "autosaveLoading",
+            OnSuccess = "autosaveSuccess",
+            OnFailure = "autosaveError"
+        },
+        new
+        {
+            @class = "autosave",
+            data_label = "#lblStateSOAP",
+            data_text_loading = "Salvando alterações...",
+            data_text_loaded = "Todas as alterações salvas",
+            data_text_error = "Ocorreu um erro, por favor tente mais tarde"
+        }
+    ))
+    {
+        @Html.HiddenFor(x => x.Date)
+        @Html.HiddenFor(x => x.IdSoap)
+        <div class="text-right">
+            <label id="lblStateSOAP" class="text-left mdbc-autosave-label"><i class="fa fa-floppy-o"></i>&nbsp;Todas as alterações salvas</label>
+        </div>
+        <div class="md-form">
+            @Html.LabelFor(m => m.Subjective, new { @class = "" })
+            @Html.TextAreaFor(m => m.Subjective, new { @class = "form-control md-textarea" })
+        </div>
+
+        <br />
+        <div class="md-form">
+            @Html.LabelFor(m => m.Objective, new { @class = "" })
+            @Html.TextAreaFor(m => m.Objective, new { @class = "form-control md-textarea" })
+        </div>
+
+        <br />
+        <div class="md-form">
+            @Html.LabelFor(m => m.Evaluation, new { @class = "" })
+            @Html.TextAreaFor(m => m.Evaluation, new { @class = "form-control md-textarea" })
+        </div>
+
+        <br />
+        <div class="md-form">
+            @Html.LabelFor(m => m.Plan, new { @class = "" })
+            @Html.TextAreaFor(m => m.Plan, new { @class = "form-control md-textarea" })
+        </div>
+    }
+</div>

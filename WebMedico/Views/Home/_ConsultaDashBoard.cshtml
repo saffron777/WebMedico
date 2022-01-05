@@ -1,0 +1,154 @@
+﻿@using IFarmacias.Models.Enums
+@model IEnumerable<IFarmacias.Models.ConsultasResponse>
+
+@{
+    DateTime auxDate;
+    string strDate;
+}
+
+<div class="col-md-7 mb-r">
+        <div class="card">
+            <table class="table mdbc-nomargin">
+                <thead class="card-table-head">
+                    <tr>
+                        <th class="text-left">As minhas consultas (@Model.Count(x => x.Status == ConsultationStatus.InProgress))</th>
+                        <th class="text-right"><a href="#" style="color: #FE2E9A; text-decoration-line:underline">Ver histórico de consultas</a></th>
+                    </tr>
+                </thead>
+                <tbody class="card-table-body hover">
+                    @foreach (var item in Model.Where(x => x.Status == ConsultationStatus.InProgress))
+                    {
+                        auxDate = new DateTime(DateTime.Now.Subtract(item.Date).Ticks);
+                        strDate = string.Empty;
+
+                        if (auxDate.Day - 1 > 1)
+                        {
+                            if (auxDate.Year > 1)
+                            {
+                                strDate += auxDate.Year > 2 ? (auxDate.Year - 1) + " anos, " : "1 ano, ";
+                            }
+
+                            if (auxDate.Month > 1)
+                            {
+                                strDate += auxDate.Month > 2 ? (auxDate.Month - 1) + " meses, " : "1 mes, ";
+                            }
+
+                            if (auxDate.Day > 1)
+                            {
+                                strDate += auxDate.Day > 2 ? (auxDate.Day - 1) + " dias atrás" : "1 dia";
+                            }
+                        }
+                        else
+                        {
+                            strDate += "Hoje";
+                        }
+
+                        <tr class="noborders">
+                            <td colspan="2" class="nasted-table waves-effect" onclick="location.href = '@Url.Action("ConsultDetail", "Home", new {idConsult = item.IdConsulta} )'">
+                                <table class="table ">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>@item.Name</strong></td>
+                                            <td class="text-right"><strong>@item.Date</strong></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><span class="black-54"><strong>@item.Description</strong></span></td>
+                                            <td class="text-right"><h6>(@strDate)</h6></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><span class="black-54"><strong>@item.Age anos</strong></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <i class="fa fa-globe" aria-hidden="true"></i>
+                                                &nbsp;
+                                                <i class="fa fa-mars male" aria-hidden="true"></i>
+                                                &nbsp;
+                                                <i class="fa fa-circle online" aria-hidden="true"> </i>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-5 mb-r">
+        <div class="card">
+            <table class="table mdbc-nomargin">
+                <thead class="card-table-head">
+                    <tr>
+                        <th class="text-left">Consultas pendentes (@Model.Count(x => x.Status == ConsultationStatus.Open))</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="card-table-body hover">
+
+                    @foreach (var item in Model.Where(x => x.Status == ConsultationStatus.Open))
+                    {
+                        auxDate = new DateTime(DateTime.Now.Subtract(item.Date).Ticks);
+                        strDate = string.Empty;
+
+                        if (auxDate.Day - 1 > 1)
+                        {
+                            if (auxDate.Year > 1)
+                            {
+                                strDate += auxDate.Year > 2 ? (auxDate.Year - 1) + " anos, " : "1 ano, ";
+                            }
+
+                            if (auxDate.Month > 1)
+                            {
+                                strDate += auxDate.Month > 2 ? (auxDate.Month - 1) + " meses, " : "1 mes, ";
+                            }
+
+                            if (auxDate.Day > 1)
+                            {
+                                strDate += auxDate.Day > 2 ? (auxDate.Day - 1) + " dias atrás" : "1 dia";
+                            }
+                        }
+                        else
+                        {
+                            strDate += "Hoje";
+                        }
+
+                        <tr class="noborders">
+                            <td colspan="2" class="nasted-table ">
+                                <table class="table ">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>@item.Name</strong></td>
+                                            <td class="text-right"><strong>@item.Date</strong></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><span class="black-54"><strong>@item.Description</strong></span></td>
+                                            <td class="text-right"><h6>(@strDate)</h6></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><span class="black-54"><strong>@item.Age anos</strong></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <i class="fa fa-globe" aria-hidden="true"></i>
+                                                <i class="fa fa-mars male" aria-hidden="true"></i>
+                                                <i class="fa fa-circle online" aria-hidden="true"> </i>
+                                            </td>
+                                            <td class="text-right">
+                                                <a data-toggle="modal" data-target="#modalForgotPassword" style="color: #FE2E9A" data-idconsulta=@item.IdConsulta>ASSUMIR</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>

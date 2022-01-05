@@ -1,0 +1,282 @@
+﻿@model WebMedico.Models.DoctorViewModel
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+<br />
+
+<!-- Modal Register -->
+<div class="modal fade" id="modalRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h3><strong>Confirmacao de registo</strong></h3>
+            </div>
+
+            <!--Body-->
+            <div class="modal-body">
+                <p class="black-54"></p>
+            </div>
+
+            <!--Footer-->
+            <div class="modal-footer">
+                <button type="button" onclick="redirect()" class="btn-flat waves-effect" data-dismiss="modal">ENTENDI</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal Register -->
+<!-- Modal Register -->
+<div class="modal fade" id="modalNoRegister" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h3><strong>Confirmacao de registo</strong></h3>
+            </div>
+
+            <!--Body-->
+            <div class="modal-body">
+                <p class="black-54"></p>
+            </div>
+
+            <!--Footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn-flat waves-effect" data-dismiss="modal">ENTENDI</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Modal Register -->
+
+<div class="row justify-content-md-center">
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="card">
+            <div class="card-block no-padding-bottom">
+                <div class="avatar text-center">
+                    <img src="~/Content/Images/logo.png" alt="logo" width="75" height="75" class="mx-auto d-block" />
+                </div>
+                <br />
+                <h4 class="text-center grey-text">Médicos & Farmácias</h4>
+
+                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    if (ViewData.ModelState.Values.Any() && ViewData.ModelState["NoRegistrado"]?.Errors?.Count > 0)
+                    {
+                        <script type="text/javascript">
+                            window.onload = function () {
+                                var modal = $('#modalRegister');
+                                modal.find('.modal-body p').text("Registro não Criado");
+                                $('#modalRegister').modal();
+                            };
+                        </script>
+                    }
+
+                    if (ViewData.ModelState.Values.Any() && ViewData.ModelState["Registrado"]?.Errors?.Count > 0)
+                    {
+                        <script type="text/javascript">
+                            window.onload = function () {
+                                var modal = $('#modalRegister');
+                                modal.find('.modal-body p').text("Registro criado");
+                                $('#modalRegister').modal();
+
+                            };
+
+                            function fnRedirect(jQuery) {
+                                $(location).attr('href', 'Login');
+                            }
+                        </script>
+                    }
+
+                    <ul class="nav nav-tabs tabs-4 blue" style="visibility:hidden;height:0;" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#panel1" role="tab">Passo 1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#panel2" role="tab">Passo 2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#panel3" role="tab">Passo 3</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content no-padding-bottom padding-top-dense">
+                        <!--Panel 1-->
+                        <div class="tab-pane fade in show active" id="panel1" role="tabpanel">
+                            <!--Profile Photo-->
+                            @*<div class="row">
+                                <div class="col-sm-2 col-12">
+                                    <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-6.jpg" class="img-fluid rounded-circle z-depth-5">
+                                </div>
+                            </div>*@
+                            <!--End Profile Photo-->
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">person</i>
+                                @Html.LabelFor(m => m.NAME, "Nome", new { @class = "" })
+                                @Html.TextBoxFor(m => m.NAME, new { @id = "NAME", @class = "form-control" })
+                            </div>
+
+
+                            <div class="md-form">
+                                <i class="fa prefix black-54"></i>
+                                @Html.LabelFor(m => m.LASTNAME, "Apelido", new { @class = "" })
+                                @Html.TextBoxFor(m => m.LASTNAME, new { @id = "LASTNAME", @class = "form-control" })
+                            </div>
+
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">email</i>
+
+                                @Html.LabelFor(m => m.EMAIL, "Email", new { @class = "" })
+                                @Html.TextBoxFor(m => m.EMAIL, new { @id = "EMAIL", @class = "form-control validate", @type = "email" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">vpn_key</i>
+                                @Html.LabelFor(m => m.PASSWORD, "Palavra-passe", new { @class = "" })
+                                @Html.PasswordFor(m => m.PASSWORD, new { @id = "PASSWORD", @class = "form-control validate", @type = "password" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fa prefix black-54"></i>
+                                @Html.LabelFor(m => m.ConfirmPassword, "Confirmar Palavra-passe", new { @class = "" })
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @id = "ConfirmPassword", @class = "form-control validate", @type = "password" })
+                            </div>
+                            <div class="text-right row">
+                                <div class="col">
+                                    <div class="text-left">
+                                        <div class="md-form no-margin-bottom">
+                                            <a href="~/Home/Index" class="btn btn-danger waves-effect waves-light">Cancelar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="text-right">
+                                        <div class="md-form">
+                                            <a href="#" onclick="next();"><i class="material-icons material-icons-48">navigate_next</i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="panel2" role="tabpanel">
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">flag</i>
+                                @*@Html.LabelFor(m => m.ID_COUNTRY, "País", new { @class = "" })*@
+                                @Html.DropDownListFor(m => m.ID_COUNTRY, new SelectList(new List<Object> { new { value = "3", text = "Portugal" }, new { value = "3", text = "Others" } }, "value", "text"), new { @id = "ID_COUNTRY", @class = "mdb-select dropdown-left-icon" })
+                                <button class="mdb-autocomplete-clear">
+                                    <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="https://www.w3.org/2000/svg">
+                                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                                        <path d="M0 0h24v24H0z" fill="none" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">wc</i>
+                                @*@Html.TextBoxFor(m => m.GENDER, new { @class = "form-control" })*@
+                                @Html.DropDownListFor(m => m.GENDER, new SelectList(new List<Object> { new { value = "M", text = "Masculino" }, new { value = "F", text = "Feminino" } }, "value", "text"), new { @id = "GENDER", @class = "mdb-select dropdown-left-icon" })
+                                @Html.Label("Género", new { @class = "" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54"><strong>&nbsp;#</strong></i>
+                                @Html.LabelFor(m => m.ORDER_NUMBER, "Número da ordem", new { @class = "" })
+                                @Html.TextBoxFor(m => m.ORDER_NUMBER, new { @id = "ORDER_NUMBER", @class = "form-control" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fa fa-user-md prefix black-54"></i>
+                                @Html.LabelFor(m => m.SPECIALTY, "Especialidade", new { @class = "" })
+                                @Html.TextBoxFor(m => m.SPECIALTY, new { @id = "SPECIALTY", @class = "form-control" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">date_range</i>
+                                @Html.LabelFor(m => m.INIT_DATE_CAREER, "Data de inicio da carreira", new { @class = "" })
+                                @Html.TextBoxFor(m => m.INIT_DATE_CAREER, new { @id = "INIT_DATE_CAREER", @class = "form-control datepicker" })
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="text-left">
+                                        <div class="md-form">
+                                            <a href="#" onclick="previous();"><i class="material-icons material-icons-48">navigate_before</i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="text-right">
+                                        <div class="md-form">
+                                            <a href="#" onclick="next();"><i class="material-icons material-icons-48">navigate_next</i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="panel3" role="tabpanel">
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">date_range</i>
+                                @Html.LabelFor(m => m.BIRTH_DATE, "Data de nascimiento", new { @class = "" })
+                                @Html.TextBoxFor(m => m.BIRTH_DATE, new { @id = "BIRTH_DATE", @class = "form-control datepicker" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">translate</i>
+                                @Html.LabelFor(m => m.LANGUAGES, "Idiomas", new { @class = "" })
+                                @Html.TextBoxFor(m => m.LANGUAGES, new { @id = "LANGUAGES", @class = "form-control" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">insert_drive_file</i>
+                                @Html.LabelFor(m => m.TAXPAYER, "Contribuinte", new { @class = "" })
+                                @Html.TextBoxFor(m => m.TAXPAYER, new { @id = "TAXPAYER", @class = "form-control" })
+                            </div>
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">place</i>
+                                @Html.LabelFor(m => m.LOCALITY, "Localidade", new { @class = "" })
+                                @Html.TextBoxFor(m => m.LOCALITY, new { @id = "LOCALITY", @class = "form-control" })
+                            </div>
+
+                            <div class="md-form">
+                                <i class="fa material-icons prefix black-54">stay_primary_portrait</i>
+                                @Html.LabelFor(m => m.MOBILE_NUMBER, "Número de telemovel", new { @class = "" })
+                                @Html.TextBoxFor(m => m.MOBILE_NUMBER, new { @id = "MOBILE_NUMBER", @class = "form-control" })
+
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="text-left">
+                                        <div class="md-form">
+                                            <a href="#" onclick="previous();"><i class="material-icons material-icons-48">navigate_before</i></a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="text-right">
+                                        <div class="md-form no-margin-bottom">
+                                            <button type="submit" class="btn btn-primary">Registar</button>
+                                            @*<button id="RegisterBtn" type="submit" class="btn btn-primary">Registar</button>*@
+                                            @*   <button type="submit" class="btn btn-primary" data-target="#modalRegister" onclick="Register(NAME, LASTNAME, EMAIL, PASSWORD, GENDER, ID_COUNTRY, SPECIALTY, ORDER_NUMBER, INIT_DATE_CAREER, BIRTH_DATE, LANGUAGES, TAXPAYER, LOCALITY, MOBILE_NUMBER);">Registar</button>*@
+                                            @* <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#modalRegister"> Confirmar </button>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function next() {
+        var tabs = $('.nav-tabs');
+        var currentTab = $(tabs).find('li > a.active');
+        $(currentTab).parent().next('li').find('a').trigger('click');
+    }
+    function previous() {
+        var tabs = $('.nav-tabs');
+        var currentTab = $(tabs).find('li > a.active');
+        $(currentTab).parent().prev('li').find('a').trigger('click');
+    }
+
+    function redirect() {
+        $(location).attr('href', 'Login');
+    }
+</script>

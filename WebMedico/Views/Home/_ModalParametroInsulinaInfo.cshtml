@@ -1,0 +1,131 @@
+﻿@using IFarmacias.Models.Response
+@model IFarmacias.Models.Response.ParameterInsulinaResponse
+
+<div class="scroll-box">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <h3><strong>Colesterol</strong></h3>
+                    </div>
+                    <div class="col-4">
+                        <div class="md-form input-group">
+                            <label>De: </label>
+                            <input placeholder="Selected date" type="text" id="chartDateFrom" class="form-control datepicker" readonly="" aria-haspopup="true" aria-expanded="true" aria-readonly="false">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="md-form input-group">
+                            <label>Ate: </label>
+                            <input placeholder="Selected date" type="text" id="chartDateTo" class="form-control datepicker" readonly="" aria-haspopup="true" aria-expanded="true" aria-readonly="false">
+                        </div>
+                    </div>
+                    <div class="col-10 col-centered">
+                        <canvas id="myChart" width="200" height="200"></canvas>
+                    </div>
+
+                    <div class="col-12 text-left">
+                        <hr class="my-2">
+                        <br />
+                        <span class="badge grey">Medicoes</span>
+                        <table id="tblMediciones" class="table z-depth-1 mdbc-table table-hover">
+                            <thead>
+                                <tr class="grey-text text-darken-1">
+                                    <td class="text-left">Data</td>
+                                    <td>Valor</td>
+                                    <td>Notas</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-left">02/04/2017  14:25</td>
+                                    <td>12</td>
+                                    <td>Test</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .scroll-box {
+        position: relative;
+    }
+
+    .scrollspy-example {
+        position: relative;
+        overflow-y: scroll;
+        height: 200px;
+    }
+</style>
+<script>
+    $('.datepicker').pickadate();
+
+
+
+    var ctx = document.getElementById("myChart");
+    var data = {
+        labels: ["January", "February", "March", "April"],
+        datasets: [
+            {
+                label: "My First dataset",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(75,192,192,0.4)",
+                borderColor: "rgba(75,192,192,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: [10, 20, 40, 30],
+                spanGaps: false,
+            },
+
+            {
+                label: "My Second dataset",
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: "rgba(75,89,192,0.4)",
+                borderColor: "rgba(75,89,192,1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: "rgba(75,89,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,89,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: [0, 30, 25, 45],
+                spanGaps: false,
+            }
+        ]
+    };
+
+    var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true
+        }
+    });
+
+
+</script>

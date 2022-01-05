@@ -1,0 +1,162 @@
+﻿@using IFarmacias.Models.Response
+@model List<McdtExamsResponse>
+
+@using (Ajax.BeginForm("_ModalMcdtTableSet",
+                            new { isReadonly = ViewBag.isReadonly },
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "modalMcdtTable",
+                                InsertionMode = InsertionMode.Replace,
+                                OnFailure = "onModalError",
+                                OnBegin = "onBeginSubmit"
+                            }
+))
+{
+    <table class="table table-bordered table-hover mdbc-table text-right">
+        <thead>
+            <tr>
+                <th class="text-right" width="80">Codigo</th>
+                <th class="text-right">Exame</th>
+                <th class="text-right" width="108">Quantidade</th>
+                @if (!ViewBag.isReadonly || ViewBag.Index != null)
+                {
+                    <th class="text-right">Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                for (int index = 0; index < Model.Count; index++)
+                {
+                    if (ViewBag.Index != index)
+                    {
+                        <tr>
+                            <td>
+                                @Model[index].Code
+                                @Html.HiddenFor(x => x[index].Code)
+                            </td>
+                            <td>
+                                @Model[index].ExamName
+                                @Html.HiddenFor(x => x[index].ExamName)
+                            </td>
+                            <td>
+                                @Model[index].Qtd
+                                @Html.HiddenFor(x => x[index].Qtd)
+                            </td>
+
+                            @if (!ViewBag.isReadonly)
+                            {
+                                <td class="mdbc-actions">
+                                    @Ajax.ActionLink("edit", "_ModalMcdtTableEditRow",
+                                        new
+                                        {
+                                            index
+                                        },
+                                        new AjaxOptions
+                                        {
+                                            UpdateTargetId = "modalMcdtTable",
+                                            InsertionMode = InsertionMode.Replace,
+                                            OnFailure = "onModalError",
+                                            OnBegin = "onBeginSubmit"
+                                        },
+                                        new
+                                        {
+                                            @class = "material-icons grey-text text-darken-2"
+                                        })
+                                    @Ajax.ActionLink("delete", "_ModalMcdtTableDeleteRow",
+                                        new
+                                        {
+                                            isReadonly = ViewBag.isReadonly,
+                                            index
+                                        },
+                                        new AjaxOptions
+                                        {
+                                            UpdateTargetId = "modalMcdtTable",
+                                            InsertionMode = InsertionMode.Replace,
+                                            OnFailure = "onModalError",
+                                            OnBegin = "confirmAction",
+                                            OnComplete = "onModalLoaded"
+                                        },
+                                        new
+                                        {
+                                            data_toggle = "popover",
+                                            data_placement = "left",
+                                            data_content = "Tem certeza que deseja remover o exame?",
+                                            title = "Confirmar",
+                                            @class = "material-icons grey-text text-darken-2"
+                                        })
+                                </td>
+                            }
+                            else if (ViewBag.Index != null)
+                            {
+                                <td>&nbsp;</td>
+                            }
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="mdbc-table-addrow">
+                            <td class="mdbc-relative text-right">
+                                @Html.TextBoxFor(x => x[index].Code, new { @class = "form-control text-right" })
+                            </td>
+                            <td class="mdbc-relative text-right">
+                                @Html.TextBoxFor(x => x[index].ExamName, new { @class = "form-control text-right" })
+                            </td>
+                            <td class="text-right">
+                                @Html.TextBoxFor(x => x[index].Qtd, new { @class = "form-control text-right" })
+                            </td>
+                            <td class="mdbc-actions text-right">
+                                @Ajax.ActionLink("cancel", "_ModalMcdtTable",
+                                new
+                                {
+                                    isReadonly = false
+                                },
+                                new AjaxOptions()
+                                {
+                                    UpdateTargetId = "modalMcdtTable",
+                                    InsertionMode = InsertionMode.Replace,
+                                    OnFailure = "onModalError",
+                                    OnBegin = "onBeginSubmit",
+                                    OnComplete = "onModalLoaded"
+                                },
+                                new
+                                {
+                                    @class = "material-icons grey-text text-darken-2"
+                                })
+                                <button type="submit" class="material-icons grey-text text-darken-2 transparent">check_circle</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+            else if (ViewBag.isReadonly)
+            {
+                <tr>
+                    <td colspan="6" class="text-center">Não existem dados</td>
+                </tr>
+            }
+
+            @if (!ViewBag.isReadonly)
+            {
+                Model.Add(new McdtExamsResponse());
+                int newRowIndex = Model.Count - 1;
+
+                <tr class="mdbc-table-addrow">
+                    <td class="mdbc-relative">
+                        @Html.TextBoxFor(x => x[newRowIndex].Code, new { @class = "form-control text-right" })
+                    </td>
+                    <td class="mdbc-relative">
+                        @Html.TextBoxFor(x => x[newRowIndex].ExamName, new { @class = "form-control text-right" })
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(x => x[newRowIndex].Qtd, new { @class = "form-control text-right" })
+                    </td>
+                    <td class="mdbc-actions text-right">
+                        <button type="submit" class="material-icons grey-text text-darken-2 mdbc-icon-md transparent">add</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

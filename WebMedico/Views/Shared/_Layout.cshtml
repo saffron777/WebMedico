@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - WebMedico - ifarmacias</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/css/css")
+    <style>
+        .material-icons {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body class="hidden-sn white-skin">
+    <div class="not-available hidden-md-up">
+        <div>
+            <div class="card">
+                <div class="card-block">
+                    <div class="avatar text-center">
+                        <img src="~/Content/Images/logo.png" alt="logo" width="100" height="100" class="mx-auto d-block" />
+                    </div>
+                    <br />
+                    <h3 class="text-center grey-text">Não disponível nesta resolução</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Close Session -->
+    <div class="modal fade" id="modalCloseSession" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <h3><strong>Terminar sesao</strong></h3>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <p class="black-54">Tem a certeza que deseja terminar sessao?</p>
+                </div>
+
+                <!--Footer-->
+                <div class="modal-footer">
+                    <a type="button" href="/" onclick="location.href = '@Url.Action("LogOff", "Account")'" class="btn-flat waves-effect" style="color: #FE2E9A" data-dismiss="modal">Sim</a>
+                    <a type="button" href="/" class="btn-flat waves-effect" style="color: #FE2E9A" data-dismiss="modal">Nao</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @RenderSection("modals", required: false)
+
+    <header>
+        <!-- Sidebar navigation -->
+        <ul id="slide-out" class="side-nav  custom-scrollbar ">
+
+            <!-- Logo -->
+            <li>
+                <div class="user-box">
+                    <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" class="img-fluid rounded-circle">
+                    @if (HttpContext.Current.User is WebMedico.Models.CustomPrincipal)
+                    {
+                        <p class="user text-center black-text">
+                            @(((WebMedico.Models.CustomPrincipal)HttpContext.Current.User).Name) @(((WebMedico.Models.CustomPrincipal)HttpContext.Current.User).LastName)
+                            <br>@(((WebMedico.Models.CustomPrincipal)HttpContext.Current.User).Email)
+                        </p>
+                    }
+                </div>
+            </li>
+            <hr />
+            <!--/. Logo -->
+            <!-- Side navigation links -->
+            <li>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="waves-effect"><i class="material-icons black-37">receipt</i>&emsp;<strong>Faturacão</strong></a>
+                    </li>
+                    <li>
+                        <a class="waves-effect"><i class="material-icons black-37">settings</i>&emsp;<strong>Definicões</strong></a>
+                    </li>
+                    <li>
+                        <a class="waves-effect" data-toggle="modal" data-target="#modalCloseSession"><i class="material-icons black-37">exit_to_app</i>&emsp;<strong>Terminar sessão</strong></a>
+                    </li>
+                </ul>
+            </li>
+            <!--/. Side navigation links -->
+            <div class="sidenav-bg mask-strong"></div>
+        </ul>
+        <!--/. Sidebar navigation -->
+        <!--Navbar-->
+        <nav class="navbar fixed-top navbar-toggleable-md navbar-dark scrolling-navbar double-nav blue">
+
+            <!-- SideNav slide-out button -->
+            <div class="float-left">
+                <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons white-text">menu</i></a>
+            </div>
+            <div class="breadcrumb-dn mr-auto">
+                <p class="text-white"><strong>Medicos &amp; Farmácias</strong></p>
+            </div>
+
+            <!--Navbar links-->
+            <ul class="nav navbar-nav nav-flex-icons ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="text-white nav-link dropdown-toggle waves-effect waves-light " href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="badge red">99</span> <i class="fa fa-bell text-white"></i>
+                        <span class="hidden-sm-down"></span>
+                    </a>
+                    <div class="dropdown-menu header-notifications animated dropdown-menu-left" aria-labelledby="navbarDropdownMenuLink">
+                        <ul>
+                            Notificacões
+                            <li class="active-notification"><i class="fa fa-user" aria-hidden="true"></i> New order received <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 13 min</span></li>
+                            <li class="active-notification"><i class="fa fa-user" aria-hidden="true"></i> New order received <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 51 min</span></li>
+                            <li class="active-notification"><i class="fa fa-bullhorn" aria-hidden="true"></i> Your campaign is about to end <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 3 hours</span></li>
+                            <li class="active-notification"><i class="fa fa-line-chart" aria-hidden="true"></i> Raport is ready to be downloaded <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 1 day</span></li>
+                            <li class="active-notification"><i class="fa fa-life-saver" aria-hidden="true"></i> Something else <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 1 day</span></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle waves-effect waves-light" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="badge red">99</span> <i class="fa fa-envelope text-white"></i>
+                        <span class="hidden-sm-down"></span>
+                    </a>
+                    <div class="dropdown-menu header-notifications animated dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                        <ul>
+                            Mensagens
+                            <li class="active-notification"><i class="fa fa-user" aria-hidden="true"></i> New order received <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 13 min</span></li>
+                            <li class="active-notification"><i class="fa fa-user" aria-hidden="true"></i> New order received <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 51 min</span></li>
+                            <li class="active-notification"><i class="fa fa-bullhorn" aria-hidden="true"></i> Your campaign is about to end <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 3 hours</span></li>
+                            <li class="active-notification"><i class="fa fa-line-chart" aria-hidden="true"></i> Raport is ready to be downloaded <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 1 day</span></li>
+                            <li class="active-notification"><i class="fa fa-life-saver" aria-hidden="true"></i> Something else <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 1 day</span></li>
+                        </ul>
+                    </div>
+                </li>
+
+            </ul>
+            <!--/Navbar links-->
+
+        </nav>
+        <!--/.Navbar-->
+    </header>
+
+    <main>
+        <div class="container-fluid body-content">
+            @RenderBody()
+        </div>
+    </main>
+
+    @*<footer class="page-footer blue center-on-small-only fixed-bottom">
+            <p>&emsp; &copy; @DateTime.Now.Year - WebMedico - ifarmacias</p>
+        </footer>*@
+
+    @Scripts.Render("~/bundles/tether")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/mdb")
+   
+    @RenderSection("scripts", required: false)
+    <script>
+        $('.datepicker').pickadate({
+            today: '',
+            clear: 'Limpar',
+            close: 'Cancelar'
+        });
+        var states = [
+            "Brasil",
+            "Portugal",
+            "Venezuela",
+            "Chile",
+            "Argentina"
+        ];
+        $(document).ready(function () {
+            $('.mdb-select').material_select();
+            $('.mdb-autocomplete').mdb_autocomplete({
+                data: states
+            });
+        });
+    </script>
+    <script>
+        // SideNav init
+        new WOW().init();
+        $(".button-collapse").sideNav();
+        var el = document.querySelector('.custom-scrollbar');
+        Ps.initialize(el);
+    </script>
+</body>
+</html>

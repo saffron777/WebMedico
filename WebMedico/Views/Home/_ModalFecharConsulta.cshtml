@@ -1,0 +1,98 @@
+﻿@model WebMedico.Models.BasicInfoViewModel
+
+<div class="modal fade" id="modalConfirmarConsulta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <h3><strong>Cobrar - Terminar</strong></h3>
+            </div>
+
+            <!--Body-->
+            <div class="modal-body">
+                <p class="black-54">Tem a certeza que deseja terminar la consulta?</p>
+            </div>
+
+            <!--Footer-->
+            <div class="modal-footer">
+                <a type="button" href="#" onclick="location.href = '@Url.Action("MantenerConsult", "Home", new {idConsult = Model.IdConsult} )'"  class="btn-flat waves-effect pink-text text-lighten-1" data-dismiss="modal">Manter Consulta</a>
+                <a type="button" href="#" onclick="location.href = '@Url.Action("ArchivarConsult", "Home", new {idConsult = Model.IdConsult} )'" class="btn-flat waves-effect pink-text text-lighten-1" data-dismiss="modal">Arquivar Consulta</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-ext mdbc-modal" id="modalFecharConsulta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Facturacao do utente</h4>
+            </div>
+            <!--Body-->
+            <div class="modal-body">
+                <div class="col-11 col-centered">
+                    <div class="md-form">
+                        <input type="text" id="nomeFechar" class="form-control">
+                        <label for="nomeFechar">Nome</label>
+                    </div>
+                    <br />
+
+                    <div class="md-form">
+                        <input type="text" id="nifFechar" class="form-control">
+                        <label for="nifFechar">NIF</label>
+                    </div>
+                    <br />
+
+                    <div class="md-form">
+                        <input type="text" id="moradaFechar" class="form-control">
+                        <label for="moradaFechar">Morada</label>
+                    </div>
+                    <br />
+
+                    <div class="md-form">
+                        <input type="text" id="cidadeFechar" class="form-control">
+                        <label for="cidadeFechar">Cidade</label>
+                    </div>
+                    <br />
+
+                    <div class="md-form">
+                        <input type="text" id="codPostalFechar" class="form-control">
+                        <label for="codPostalFechar">Codigo-postal</label>
+                    </div>
+                    <br />
+
+                    <div class="md-form">
+                        <select class="mdb-select" id="paisFechar">
+                            <option value="" disabled="" selected=""></option>
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            <option value="3">Option 3</option>
+                        </select>
+                        <label for="paisFechar">Codigo-postal</label>
+                    </div>
+                    <br />
+
+                    <div class="md-form">
+                        <select class="mdb-select" id="tipoPedidoFechar">
+                            <option value="" disabled="" selected=""></option>
+                            <option value="1">Option 1</option>
+                            <option value="2">Option 2</option>
+                            <option value="3">Option 3</option>
+                        </select>
+                        <label for="tipoPedidoFechar">Tipo de pedido</label>
+                    </div>
+                </div>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn-flat red-text waves-effect" data-toggle="modal" data-target="#modalConfirmarConsulta" data-dismiss="modal">Cobrar-Terminar</button>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>

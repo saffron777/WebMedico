@@ -1,0 +1,559 @@
+﻿@using IFarmacias.Models.Response
+@model WebMedico.Models.BasicInfoViewModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutConsulta.cshtml";
+    ViewBag.Title = "Consulta";
+}
+
+@section styles {
+    @Styles.Render("~/css/imageviewer")    
+
+    <style>
+        .docs-pictures {
+        }
+
+            .docs-pictures > li {
+                float: left;
+                width: 25%;
+                height: 25%;
+                margin: 0 -1px -1px 0;
+                border: 1px solid transparent;
+                overflow: hidden;
+                padding: .25rem;
+                cursor: zoom-in;
+            }
+
+                .docs-pictures > li > img {
+                    border-radius: 0;
+                }
+
+        .docs-gallery h3 {
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            padding-left: 1.25rem;
+            font-weight: normal;
+        }
+
+        .docs-gallery h3:first-child {            
+            margin-top: 0;
+        }
+
+    .mdbc-relative {
+        position: relative;
+    }
+    </style>
+}
+
+@section modals {
+    <div class="modal" id="modalCancelarConsulta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <h3><strong>Cancelar consulta</strong></h3>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <p class="black-54">Tem a certeza que deseja cancelar consulta?</p>
+                </div>
+
+                
+
+                <!--Footer-->
+                <div class="modal-footer">
+                    <a type="button" href="#" onclick="location.href = '@Url.Action("CancelConsult", "Home", new {idConsult = Model.IdConsult} )'" class="btn-flat waves-effect pink-text text-lighten-1" data-dismiss="modal">Sim</a>
+                    <a type="button" href="#" class="btn-flat waves-effect pink-text text-lighten-1" data-dismiss="modal">Nao</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modalNotificarUtente" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <h3><strong>Notificar Utente</strong></h3>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <p class="black-54">O medicamento esta por tomar</p>
+                </div>
+
+                <!--Footer-->
+                <div class="modal-footer">
+                    <a type="button" href="#" class="btn-flat waves-effect pink-text text-lighten-1" data-dismiss="modal">Visto</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal modal-ext mdbc-modal" id="modalReceita" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true"></div>
+    <div class="modal modal-ext mdbc-modal" id="modalMCDT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true"></div>
+    <div class="modal modal-ext mdbc-modal" id="modalParameter" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true"></div>
+
+    @{ Html.RenderPartial("_ModalFecharConsulta", Model); }
+    @*@{ Html.RenderPartial("_ModalAdicionarMedicacao"); }*@
+
+}
+
+<div class="container-fluid body-content mdbc-content">
+    <div class="row">
+        <ul id="slide-out" class="side-nav mdbc-sidenav fixed ps-container ps-theme-default col-lg-2 col-md-4 ps-active-y">
+            <li>
+                <ul class="mdbc-nomargin">
+                    <li>
+                        <ul class="mdbc-nestedlist">
+                            <li>
+                                <h5 class="title black-text text-left"><strong>@Model.Name</strong> <small><i class="fa fa-circle online" aria-hidden="true"></i></small></h5>
+                                <ul class="grey-text header">
+                                    <li><b><i class="material-icons icon darken-2">person</i></b> &nbsp; @Model.Age anos</li>
+                                    @if (Model.Gender == "M")
+                                    {
+                                        <li><b><i class="fa fa-mars icon"></i></b>   Masculino</li>
+                                    }
+                                    else
+                                    {
+                                        <li><b><i class="fa fa-venus icon"></i></b>   Femenino</li>
+                                    }
+                                </ul>
+                            </li>
+                            <li>
+                                <a data-toggle="collapse" href="#motivo" class="waves-effect black-text" aria-expanded="false" aria-controls="motivo">Motivo</a>
+                                <hr />
+                                <ul class="collapse show grey-text" id="motivo">
+                                    <li>@Model.ConsultationDescription</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a data-toggle="collapse" href="#alergias" class="waves-effect black-text" aria-expanded="false" aria-controls="alergias">Alergias</a>
+                                <hr />
+                                <ul class="collapse show grey-text" id="alergias">
+                                    <li>@Model.Alergy</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a data-toggle="collapse" href="#doencas" class="waves-effect black-text" aria-expanded="false" aria-controls="doencas">Doenças</a>
+                                <hr />
+                                <ul class="collapse show grey-text" id="doencas">
+                                    <li>@Model.Diseases</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a data-toggle="collapse" href="#subsissaude" class="waves-effect black-text" aria-expanded="false" aria-controls="subsissaude">Sub-sistema de saude</a>
+                                <hr />
+                                <ul class="collapse show grey-text" id="subsissaude">
+                                    @foreach (var subSys in Model.Subsystem)
+                                    {
+                                        <li>@subSys</li>
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <div class="row col-12 mdbc-absolute bottom white mdbc-zindex-10">
+                    <button type="button" class="btn-flat btn-sm mdbc-alittlesmaller red-text waves-effect mdbc-btn-fullwidth mdbc-nomargin" data-toggle="modal" data-target="#modalCancelarConsulta">CANCELAR CONSULTA</button>
+                    <br />
+                    <button type="button" class="btn-flat btn-sm mdbc-alittlesmaller blue-text waves-effect mdbc-btn-fullwidth mdbc-nomargin" data-toggle="modal" data-target="#modalFecharConsulta">FECHAR CONSULTA</button>
+                </div>
+            </li>
+        </ul>
+
+        <main class="col-md-9 col-lg-8 offset-lg-2 mdbc-main" style="">
+
+            <!-- Nav tabs -->
+            <div class="tabs-wrapper">
+                <ul class="nav classic-tabs blue" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link waves-light active" data-toggle="tab" href="#panelSoap" role="tab">SOAP</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link waves-light" data-toggle="tab" href="#panelAnexos" role="tab">Anexos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link waves-light" data-toggle="tab" href="#panelReceitas" role="tab">Receitas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link waves-light" data-toggle="tab" href="#panelMcdt" role="tab">MCDT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link waves-light" data-toggle="tab" href="#panelMedicacao" role="tab">Medicacao</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link waves-light" data-toggle="tab" href="#panelParametros" role="tab">Parametros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link waves-light" data-toggle="tab" href="#panelHistorico" role="tab">Historico</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Tab panels -->
+            <div class="tab-content mdbc-tab-content card">
+
+                <!--Panel SOAP-->
+                <div class="tab-pane fade in show active" id="panelSoap" role="tabpanel">
+                    @Html.Action("_TabSoap", new { idConsulta = Model.IdConsult })
+                </div>
+
+                <!--Panel Anexos-->
+                <div class="tab-pane fade" id="panelAnexos" role="tabpanel">
+                    @Html.Action("_TabAnexos", new { idConsulta = Model.IdConsult })
+                </div>
+
+                <!--Panel Receitas-->
+                <div class="tab-pane fade" id="panelReceitas" role="tabpanel">
+                    @Html.Action("_TabReceitas", new { idConsulta = Model.IdConsult })
+                </div>
+
+                <!--Panel Mcdt-->
+                <div class="tab-pane fade" id="panelMcdt" role="tabpanel">
+                    @Html.Action("_TabMCDT", new { idConsulta = Model.IdConsult })
+                </div>
+
+                <!--Panel Medicacao-->
+                <div class="tab-pane fade" id="panelMedicacao" role="tabpanel">
+                    @Html.Action("_TabMedicacao", new { idConsulta = Model.IdConsult })
+                </div>
+
+                <!--Panel Parametros-->
+                <div class="tab-pane fade" id="panelParametros" role="tabpanel">
+                    @Html.Action("_TabParametros", new { idConsulta = Model.IdConsult })
+                </div>
+
+                <!--Panel Historico-->
+                <div class="tab-pane fade" id="panelHistorico" role="tabpanel">
+                    @Html.Action("_TabHistorico", new { idConsulta = Model.IdConsult })
+                </div>
+
+            </div>
+
+        </main>
+        <nav class="col-md-3 col-lg-2 hidden-xs-down white mdbc-sidebar mdbc-sidebar-right">
+            <ul>
+                <li>
+                    <div class="mdbc-chat-messages custom-scrollbar">
+
+                    </div>
+                    <div class="mdbc-chat-input mdbc-absolute bottom col-12 white mdbc-zindex-10">
+                        <div class="md-form input-group">
+
+                            <textarea class="form-control md-textarea" placeholder="Mensagem..." rows='1' data-max-rows='3' data-min-rows='1' aria-describedby="btnSend"></textarea>
+                            <a class="input-group-addon transparent waves-effect" id="btnSend">
+                                <i class="material-icons">send</i>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </nav>
+    </div>
+</div>
+
+<div class="hidden-xs-up" id="loader">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content text-center">
+            <div class="loader-container">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-red">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-yellow">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-green">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div><div class="gap-patch">
+                            <div class="circle"></div>
+                        </div><div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/ajax")
+    @Scripts.Render("~/bundles/charts")
+    @Scripts.Render("~/bundles/imageviewer")
+    @Scripts.Render("~/bundles/customval")
+    <script>
+
+        const urlSearchProducts = '@Url.Action("SearchProducts")';
+
+        $("#modal-contact").modal("show");
+        
+
+        var actionConfirmed = false,
+            $btnAction;
+        function confirmAction() {
+            $btnAction = $(this);
+            if (actionConfirmed == true) {
+                actionConfirmed = false;
+                $btnAction.popover('dispose');
+
+                onBeginSubmit();
+                return true;
+            }
+            $('[data-toggle="popover"]').popover('dispose');
+
+            $btnAction.popover({
+                animation: false,
+                template: '<div class="popover" role="tooltip"> \
+                             <div class="popover-arrow"></div> \
+                             <h3 class="popover-title pink-text text-lighten-1"></h3> \
+                             <div class="popover-content"></div> \
+                             <div class="text-center"> \
+                                <button type="button" class="btn-flat waves-effect pink-text text-lighten-1 confirm-accept">Sim</button> \
+                                <button type="button" class="btn-flat waves-effect pink-text text-lighten-1 confirm-reject">Nao</button> \
+                             </div> \
+                           </div>'
+            }).popover('show');
+
+            return actionConfirmed;
+        }
+
+        $(document).on("click", ".confirm-accept", function () {
+            actionConfirmed = true;
+
+            $btnAction.click();
+        });
+
+        $(document).on("click", ".confirm-reject", function () {
+            actionConfirmed = false;
+
+            $btnAction.popover('hide');
+        });
+
+        $('#horas').pickatime({
+            twelvehour: false
+        });
+
+        var typewatch = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        $(document).on('input', '.autocomplete-producto', function () {
+            var $input = $(this);
+            typewatch(function () {
+                if ($input.val() !== '') {
+
+                    var dataInput;
+
+                    if ($input.hasClass('code')) {
+                        dataInput = { code: $input.val() }
+                    }
+                    else if ($input.hasClass('name')) {
+                        dataInput = { name: $input.val() }
+                    }
+
+                    $.getJSON(urlSearchProducts, dataInput, function (data) {
+                        if (data && data.length > 0) {
+                            $('.mdb-autocomplete-wrap').off();
+                            $('.mdb-autocomplete-wrap').remove();
+
+                            $input.mdb_autocomplete({
+                                data: data
+                            });
+
+                            $input.trigger('keyup');
+
+                            $('.mdb-autocomplete-wrap').on('click', 'li', function () {
+                                $('.mdbc-table-addrow .code').val($(this).find('input').val());
+                                $('.mdbc-table-addrow .name').val($(this).text());
+
+                                $('.mdbc-table-addrow .code').focus();
+                                $('.mdbc-table-addrow .name').focus();
+
+                                $('.mdb-autocomplete-wrap').off();
+                                $('.mdb-autocomplete-wrap').remove();
+                            });
+                        }
+                    });
+                }
+            }, 500);
+        });
+
+        var asIconLoaded = '<i class="fa fa-floppy-o"></i>',
+            asIconLoading = '<i class="fa fa-circle-o-notch fa-spin"></i>',
+            asIconError = '<i class="fa fa-times"></i>';
+
+        $("form.autosave").on('input', 'input, textarea', function () {
+            var $input = $(this),
+                $form = $input.closest('form');
+            typewatch(function () {
+                $form.submit();
+            }, 500);
+        });
+
+        function autosaveLoading() {
+            var $form = $(this);
+
+            $($form.data("label"))
+                .html(asIconLoading + "&nbsp;" + $form.data("textLoading"));
+        }
+
+        function autosaveSuccess() {
+            var $form = $(this);
+
+            $($form.data("label"))
+                .html(asIconLoaded + "&nbsp;" + $form.data("textLoaded"));
+        }
+
+        function autosaveError() {
+            var $form = $(this);
+
+            $($form.data("label"))
+                .html(asIconError + "&nbsp;" + $form.data("textError"));
+        }
+
+        function onBeginSubmit() {
+            $("*", this).prop('disabled', true);
+        }
+
+        function disableAll() {
+            $("*", $(this).closest('.modal-body')).prop('disabled', true);
+        }
+
+        function onModalLoaded() {
+            $("input[type=text]").change();
+
+            var form = $($(this).data('ajaxUpdate')).find("form");
+            
+            form.each(function () {
+                $(this).removeData('validator');
+                $(this).removeData('unobtrusiveValidation');
+                $.validator.unobtrusive.parse($(this));
+            });
+        }
+
+        function onModalLoading() {
+            $($(this).data('target')).html($('#loader').html());
+        }
+
+        function onModalError(err) {
+            //alert(err.statusText);
+            console.log(err);
+        }
+
+        function onModalSubmited() {
+            $(this).closest('.modal').modal('hide');
+        }
+
+        var viewer = new Viewer(document.getElementById('gallery'), {
+            url: 'data-original'
+        });
+
+        $(document).on('click', '.clockpicker-button', function() {
+            $(this).closest('.clockpicker').siblings('.timepicker').change();
+        });
+
+        $(document).on('click', '[data-remote]', function () {
+            $($(this).data('remote')).click();
+        });
+        
+        $(document).on('click', '.less', function() {
+            var value = $(this).siblings('input').val();
+            value = value === '' | value === 0 ? 0 : value;
+            value--;
+            $(this).siblings('input').val(value);
+        });
+
+        $(document).on('click', '.more', function() {
+            var value = $(this).siblings('input').val();
+            value = value === '' | value === 0 ? 0 : value;
+            value++;
+            $(this).siblings('input').val(value);
+        });
+
+        //BASED ON: http://codepen.io/vsync/pen/frudD
+        $(document)
+            .one('focus.autoExpand', '.mdbc-chat-input textarea', function(){
+                var savedValue = this.value;
+                this.value = '';
+                this.baseScrollHeight = this.scrollHeight;
+                this.value = savedValue;
+            })
+            .on('input.autoExpand', '.mdbc-chat-input textarea', function(){
+                var minRows = this.getAttribute('data-min-rows')|0, rows;
+                var maxRows = this.getAttribute('data-max-rows')|0, rows;
+                this.rows = minRows;
+                rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
+
+                if (rows <= maxRows)
+                    this.rows = rows > minRows ? rows : minRows + rows;
+                else
+                    this.rows = maxRows;
+            });
+
+        //$('.mdbc-chat-input textarea').on('input', function () {
+        //    this.style.height = "auto";
+        //    this.style.height = (this.scrollHeight)+"px";
+        //});
+
+        $('.fixed-action-btn').off('click');
+        $(document).on('click', '.fixed-action-btn', function () {
+            $($('[data-toggle="modal"]', this).data('target')).modal('show');
+        });
+
+        //$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        //    console.log(e.target); // Tab nueva, la que se activara
+        //    console.log(e.relatedTarget);
+        //    //e.relatedTarget; // Tab activa previamente
+        //});
+        
+       
+
+        function next() {
+            var tabs = $('.modal .nav-tabs');
+            var currentTab = $(tabs).find('li > a.active');
+            $(currentTab).parent().next('li').find('a').trigger('click');
+        }
+
+        function previous() {
+            var tabs = $('.modal .nav-tabs');
+            var currentTab = $(tabs).find('li > a.active');
+            $(currentTab).parent().prev('li').find('a').trigger('click');
+        }
+    </script>
+}
+
